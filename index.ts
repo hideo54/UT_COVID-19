@@ -11,7 +11,7 @@ import tweet from './tweet';
 const init = async () => {
     const browser = await puppeteer.launch({
         defaultViewport: {
-            width: 1200,
+            width: 800,
             height: 800,
             deviceScaleFactor: 2,
         },
