@@ -1,5 +1,6 @@
 import puppeteer from 'puppeteer';
 import Twitter from 'twitter';
+import schedule from 'node-schedule';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -22,20 +23,27 @@ const init = async () => {
         access_token_key: process.env.TWITTER_ACCESS_TOKEN!,
         access_token_secret: process.env.TWITTER_ACCESS_SECRET!,
     })
-    const page = await browser.newPage();
-    return { page, twitterClient };
+    return { browser, twitterClient };
 };
 
-const job = async (page: puppeteer.Page, twitterClient: Twitter) => {
+const job = async (browser: puppeteer.Browser, twitterClient: Twitter) => {
     const { lastUpdated, paragraphDiffs } = await makeDiffs(`${__dirname}/cache.json`);
     const currentDate = new Date();
     if (paragraphDiffs.filter(x => x.added || x.removed).length > 0) {
+        const page = await browser.newPage();
         await visualizer(page, lastUpdated, currentDate, paragraphDiffs);
         await tweet(twitterClient);
+        await page.close();
     }
 };
 
 (async () => {
-    const { page, twitterClient } = await init();
-    await job(page, twitterClient);
+    const { browser, twitterClient } = await init();
+    if (process.env.NODE_ENV === 'development') {
+        await job(browser, twitterClient);
+    } else {
+        schedule.scheduleJob('*/5 * * * *', async () => {
+            await job(browser, twitterClient);
+        });
+    }
 })();
