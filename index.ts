@@ -42,7 +42,7 @@ const job = async (browser: puppeteer.Browser, twitterClient: Twitter) => {
     if (process.env.NODE_ENV === 'development') {
         await job(browser, twitterClient);
     } else {
-        schedule.scheduleJob('*/5 * * * *', async () => {
+        schedule.scheduleJob('* * * * *', async () => {
             await job(browser, twitterClient);
         });
     }
