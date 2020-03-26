@@ -1,0 +1,79 @@
+html(lang='ja')
+    head
+        link(href='https://fonts.googleapis.com/css?family=Noto+Sans+JP:400,900&display=swap&subset=japanese' rel='stylesheet')
+        style.
+            * {
+                font-family: 'Noto Sans JP', sans-serif;
+            }
+            h1, strong {
+                font-weight: heavy;
+            }
+            body {
+                padding: 0 1em;
+            }
+            footer strong {
+                color: #d50000;
+            }
+            p {
+                margin: 8px auto;
+            }
+            .added, .removed, .no-change {
+                margin-bottom: 1em;
+                border-left-style: solid;
+                border-left-width: 5px;
+                padding-left: 1em;
+            }
+            .added {
+                border-left-color: #4caf50;
+            }
+            .added strong {
+                color: #4caf50;
+            }
+            .removed {
+                border-left-color: #f44336;
+            }
+            .removed strong {
+                color: #f44336;
+            }
+            .no-change {
+                border-left-color: #9e9e9e;
+            }
+            .omission {
+                color: #9e9e9e;
+                height: 2em;
+            }
+    body
+        header
+            h1 講義オンライン化に関する情報サイト 更新情報
+            p 特設サイトが更新されました。(前回の更新: #{lastUpdated})
+        hr
+        main
+            each diff in diffs
+                if diff.type == 'added'
+                    div.added
+                        strong 追加:
+                        each par in diff.value
+                            p= par
+                if diff.type == 'removed'
+                    div.removed
+                        strong 削除:
+                        each par in diff.value
+                            p= par
+                if diff.type == 'no-change-head'
+                    div.no-change
+                        each par in diff.value
+                            p= par
+                if diff.type == 'no-change-tail'
+                    div.omission: p ... (中略)
+                    div.no-change
+                        each par in diff.value
+                            p= par
+            div.omission: p ... (中略)
+        hr
+        footer: p
+            strong この画像は非公式に自動生成されたものです。
+            | 判断を下す前に、必ず公式ページを確認してください。
+            br
+            | 生成日時: #{currentDateStr}
+            br
+            | Twitter: @UT_COVID19

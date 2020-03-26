@@ -5,16 +5,21 @@
   "main": "index.js",
   "dependencies": {
     "@types/diff": "^4.0.2",
+    "@types/pug": "^2.0.4",
+    "@types/puppeteer": "^2.0.1",
     "diff": "^4.0.2",
     "dotenv": "^8.2.0",
+    "pug": "^2.0.4",
+    "puppeteer": "^2.1.1",
     "scrape-it": "^5.2.3",
     "typescript": "^3.8.3"
   },
   "devDependencies": {
+    "nodemon": "^2.0.2",
     "ts-node": "^8.8.1"
   },
   "scripts": {
-    "develop": "NODE_ENV='development' ts-node -P tsconfig.json index.ts",
+    "develop": "NODE_ENV='development' nodemon -P tsconfig.json index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
