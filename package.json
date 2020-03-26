@@ -7,11 +7,13 @@
     "@types/diff": "^4.0.2",
     "@types/pug": "^2.0.4",
     "@types/puppeteer": "^2.0.1",
+    "@types/twitter": "^1.7.0",
     "diff": "^4.0.2",
     "dotenv": "^8.2.0",
     "pug": "^2.0.4",
     "puppeteer": "^2.1.1",
     "scrape-it": "^5.2.3",
+    "twitter": "^1.7.1",
     "typescript": "^3.8.3"
   },
   "devDependencies": {

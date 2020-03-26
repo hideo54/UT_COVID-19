@@ -7,7 +7,7 @@ interface Diff {
     value: string[];
 }
 
-export default async (lastUpdated: string, currentDate: Date, paragraphDiffs: ArrayChange<string>[]) => {
+export default async (page: puppeteer.Page, lastUpdated: string, currentDate: Date, paragraphDiffs: ArrayChange<string>[]) => {
     const diffs: Diff[] = []
     const displayedNoChangeParagraphs = 4;
     for (const [i, diff] of paragraphDiffs.entries()) {
@@ -30,15 +30,6 @@ export default async (lastUpdated: string, currentDate: Date, paragraphDiffs: Ar
     const html = pug.renderFile(`${__dirname}/template.pug`, {
         lastUpdated, currentDateStr, diffs,
     });
-    const browser = await puppeteer.launch({
-        defaultViewport: {
-            width: 1200,
-            height: 800,
-            deviceScaleFactor: 2,
-        },
-        headless: process.env.NODE_ENV !== 'development',
-    });
-    const page = await browser.newPage();
     await page.setContent(html);
     await page.screenshot({
         path: 'visualized.png',
