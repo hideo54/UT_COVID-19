@@ -1,0 +1,30 @@
+{
+  "name": "ut_covid-19",
+  "version": "1.0.0",
+  "description": "[東京大学　教養学部・大学院総合文化研究科の講義オンライン化に関する情報サイト](https://komabataskforce.wixsite.com/forstudents) など、新型コロナウイルス流行による東京大学の対応の情報を自動でツイートする **非公式** bot [@UT_COVID19](https://twitter.com/UT_COVID19) のプログラムです。",
+  "main": "index.js",
+  "dependencies": {
+    "@types/diff": "^4.0.2",
+    "diff": "^4.0.2",
+    "dotenv": "^8.2.0",
+    "scrape-it": "^5.2.3",
+    "typescript": "^3.8.3"
+  },
+  "devDependencies": {
+    "ts-node": "^8.8.1"
+  },
+  "scripts": {
+    "develop": "NODE_ENV='development' ts-node -P tsconfig.json index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hideo54/UT_COVID-19.git"
+  },
+  "author": "hideo54",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hideo54/UT_COVID-19/issues"
+  },
+  "homepage": "https://github.com/hideo54/UT_COVID-19#readme"
+}
