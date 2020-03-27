@@ -30,7 +30,7 @@ export default async (page: puppeteer.Page, lastUpdated: string, currentDate: Da
             }
         }
     }
-    const currentDateStr = currentDate.toString();
+    const currentDateStr = currentDate.toLocaleString('ja-JP');
     const html = pug.renderFile(`${__dirname}/template.pug`, {
         lastUpdated, currentDateStr, diffs,
     });
