@@ -1,5 +1,6 @@
 import { ArrayChange } from 'diff';
 import pug from 'pug';
+import { promises as fs } from 'fs';
 import puppeteer from 'puppeteer';
 
 interface Diff {
@@ -31,8 +32,9 @@ export default async (page: puppeteer.Page, lastUpdated: string, currentDate: Da
         }
     }
     const currentDateStr = currentDate.toLocaleString('ja-JP');
+    const style = await fs.readFile(`${__dirname}/style.css`, 'utf-8');
     const html = pug.renderFile(`${__dirname}/template.pug`, {
-        lastUpdated, currentDateStr, diffs,
+        lastUpdated, currentDateStr, diffs, style,
     });
     await page.setContent(html);
     await page.waitFor(1);
