@@ -16,13 +16,17 @@ export default async (page: puppeteer.Page, lastUpdated: string, currentDate: Da
         } else if (diff.removed) {
             diffs.push({ type: 'removed', value: diff.value});
         } else {
-            if (i > 0) {
-                const value = diff.value.slice(0, displayedNoChangeParagraphs);
-                diffs.push({ type: 'no-change-head', value });
-            }
-            if (i < paragraphDiffs.length - 1) {
-                const value = diff.value.slice(-displayedNoChangeParagraphs);
-                diffs.push({ type: 'no-change-tail', value });
+            if (diff.value.length <= displayedNoChangeParagraphs * 2) {
+                diffs.push({ type: 'no-change-head', value: diff.value });
+            } else {
+                if (i > 0) {
+                    const value = diff.value.slice(0, displayedNoChangeParagraphs);
+                    diffs.push({ type: 'no-change-head', value });
+                }
+                if (i < paragraphDiffs.length - 1) {
+                    const value = diff.value.slice(-displayedNoChangeParagraphs);
+                    diffs.push({ type: 'no-change-tail', value });
+                }
             }
         }
     }
