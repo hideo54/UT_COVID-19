@@ -16,4 +16,4 @@
 1. `cp sample.env .env` and set appropriate values. (for Twitter)
 1. `npm i`
 1. `npm run build`
-1. pm2 とかで index.ts を走らせる
+1. pm2 とかで index.js を走らせる
