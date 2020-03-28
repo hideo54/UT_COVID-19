@@ -1,5 +1,6 @@
 import Twitter from 'twitter';
 import { promises as fs } from 'fs';
+import sharp from 'sharp';
 
 const tweetBody = '講義オンライン化に関する情報サイト https://komabataskforce.wixsite.com/forstudents が更新されました。';
 
@@ -13,8 +14,13 @@ export default async (client: Twitter) => {
             media_ids: res.media_id_string,
         });
     } catch (e) {
+        const smallerMedia = await sharp(media).resize({
+            height: 8192,
+        }).toBuffer();
+        const res = await client.post('media/upload', { media });
         await client.post('statuses/update', {
-            status: tweetBody + '画像は間もなく添付いたします。',
+            status: tweetBody,
+            media_ids: res.media_id_string,
         });
         const now = new Date();
         const nowStr = now.toISOString();
