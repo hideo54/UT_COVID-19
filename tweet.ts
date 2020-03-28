@@ -17,7 +17,7 @@ export default async (client: Twitter) => {
         const smallerMedia = await sharp(media).resize({
             height: 8192,
         }).toBuffer();
-        const res = await client.post('media/upload', { media });
+        const res = await client.post('media/upload', { media: smallerMedia });
         await client.post('statuses/update', {
             status: tweetBody,
             media_ids: res.media_id_string,
