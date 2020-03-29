@@ -37,7 +37,7 @@ export const generateHTML = async (lastUpdated: string, currentDate: Date, parag
     const html = pug.renderFile(`${__dirname}/template.pug`, {
         lastUpdated, currentDateStr, diffs, style,
     });
-    await fs.writeFile(`${__dirname}/generated/${currentDateStr}.html`, html);
+    await fs.writeFile(`${__dirname}/generated/${currentDate.getTime()}.html`, html);
     return html;
 };
 
