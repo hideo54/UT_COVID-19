@@ -27,6 +27,7 @@ const init = async () => {
     const page = await browser.newPage();
     const sampleHTML = await fs.readFile(`${__dirname}/visualizer/generated/test.html`, 'utf-8');
     await page.setContent(sampleHTML);
+    await page.waitFor(1);
     await page.close();
     return { browser, twitterClient };
 };
