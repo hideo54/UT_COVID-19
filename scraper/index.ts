@@ -9,7 +9,7 @@ interface SiteData {
     paragraphs: string[];
 }
 
-const fetchCurrentSiteData = async () => {
+export const fetchCurrentSiteData = async () => {
     const result = await scrapeIt<SiteData>(url, {
         lastUpdated: {
             selector: 'div#comp-k8515tfz p',
