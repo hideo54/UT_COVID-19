@@ -5,7 +5,7 @@ describe('Visualizer', () => {
     it('generates HTML from the given parsed data', async () => {
         const html = await generateHTML(
             '01:23, on March 28',
-            new Date('2020-03-28 23:45:67'),
+            new Date('2020-03-28 12:34:56'),
             [
                 {
                     count: 2,
@@ -73,7 +73,7 @@ describe('Visualizer', () => {
                 },
             ]
         );
-        const expected = await fs.readFile(`${__dirname}/generated.test.html`, 'utf-8');
+        const expected = await fs.readFile(`${__dirname}/generated/test.html`, 'utf-8');
         expect(html).toBe(expected);
     });
 });
