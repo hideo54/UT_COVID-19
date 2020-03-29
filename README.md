@@ -16,7 +16,7 @@
 ## Setup
 
 1. Prepare environment for puppeteer according to [the official document](https://github.com/puppeteer/puppeteer/blob/master/docs/troubleshooting.md#chrome-headless-doesnt-launch-on-unix). You may also need to prepare for Japanese fonts, such as `sudo apt install fonts-noto-cjk-extra`.
-1. `cp sample.env .env` and set appropriate values. (for Twitter)
+1. `cp sample.env .env` and set appropriate values for Twitter integration. Running `genAccessToken.py` may help you.
 1. `npm i`
 1. `npm run build`
 1. pm2 とかで index.js を走らせる
