@@ -7,7 +7,7 @@
     "forceConsistentCasingInFileNames": true
   },
   "exclude": [
-    "__mocks/*.ts",
+    "__mocks__/*.ts",
     "**/*.test.ts"
   ]
 }
