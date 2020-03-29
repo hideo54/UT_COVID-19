@@ -10,6 +10,10 @@
 * Twitter: [@hideo54](https://twitter.com/hideo54)
 * GitHub 上での Issue/Pull Request も大歓迎です。
 
+## Coverage
+
+[![codecov](https://codecov.io/gh/hideo54/UT_COVID-19/branch/master/graph/badge.svg?token=H09492SCLL)](https://codecov.io/gh/hideo54/UT_COVID-19)
+
 ## Setup
 
 1. Prepare environment for puppeteer according to [the official document](https://github.com/puppeteer/puppeteer/blob/master/docs/troubleshooting.md#chrome-headless-doesnt-launch-on-unix). You may also need to prepare for Japanese fonts, such as `sudo apt install fonts-noto-cjk-extra`.
