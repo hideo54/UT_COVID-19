@@ -1,5 +1,6 @@
 import { ArrayChange } from 'diff';
 import pug from 'pug';
+import moment from 'moment';
 import { promises as fs } from 'fs';
 import puppeteer from 'puppeteer';
 
@@ -32,7 +33,7 @@ export const generateHTML = async (lastUpdated: string, currentDate: Date, parag
             }
         }
     }
-    const currentDateStr = currentDate.toLocaleString('ja-JP');
+    const currentDateStr = moment(currentDate).locale('ja').format('YYYY/M/DD H:mm:ss');
     const style = await fs.readFile(`${__dirname}/style.css`, 'utf-8');
     const html = pug.renderFile(`${__dirname}/template.pug`, {
         lastUpdated, currentDateStr, diffs, style,

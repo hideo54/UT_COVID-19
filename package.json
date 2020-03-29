@@ -12,6 +12,7 @@
     "@types/twitter": "^1.7.0",
     "diff": "^4.0.2",
     "dotenv": "^8.2.0",
+    "moment": "^2.24.0",
     "node-schedule": "^1.3.2",
     "pug": "^2.0.4",
     "puppeteer": "^2.1.1",
