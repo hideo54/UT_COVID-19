@@ -75,5 +75,5 @@ describe('Visualizer', () => {
         );
         const expected = await fs.readFile(`${__dirname}/generated.test.html`, 'utf-8');
         expect(html).toBe(expected);
-    })
+    });
 });
