@@ -13,21 +13,21 @@ html(lang='ja')
                     div.added
                         strong + 追加:
                         each par in diff.value
-                            p= par
+                            p!= par
                 if diff.type == 'removed'
                     div.removed
                         span - 削除:
                         each par in diff.value
-                            p: del= par
+                            p: del!= par
                 if diff.type == 'no-change-head'
                     div.no-change
                         each par in diff.value
-                            p= par
+                            p!= par
                 if diff.type == 'no-change-tail'
                     div.omission: p ... (中略)
                     div.no-change
                         each par in diff.value
-                            p= par
+                            p!= par
             div.omission: p ... (中略)
         footer
             hr

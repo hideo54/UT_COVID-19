@@ -12,6 +12,7 @@ export const generateHTML = async (lastUpdated: string, currentDate: Date, parag
     const diffs: Diff[] = []
     const displayedNoChangeParagraphs = 4;
     for (const [i, diff] of paragraphDiffs.entries()) {
+        diff.value = diff.value.map(p => p.replace(/\n/g, '<br />'));
         if (diff.added) {
             diffs.push({ type: 'added', value: diff.value});
         } else if (diff.removed) {
