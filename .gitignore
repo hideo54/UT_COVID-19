@@ -1,6 +1,7 @@
 node_modules/
 .env
 cache.json
-visualized.png
+visualized*.png
 *.js
 !jest.config.js
+/coverage

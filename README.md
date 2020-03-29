@@ -1,5 +1,8 @@
 # UT_COVID-19
 
+![Main CI](https://github.com/hideo54/UT_COVID-19/workflows/Main%20CI/badge.svg)
+[![codecov](https://codecov.io/gh/hideo54/UT_COVID-19/branch/master/graph/badge.svg?token=H09492SCLL)](https://codecov.io/gh/hideo54/UT_COVID-19)
+
 [東京大学　教養学部・大学院総合文化研究科の講義オンライン化に関する情報サイト](https://komabataskforce.wixsite.com/forstudents) など、新型コロナウイルス流行による東京大学の対応の情報を自動でツイートする **非公式** bot [@UT_COVID19](https://twitter.com/UT_COVID19) のプログラムです。
 
 ## 連絡先
@@ -9,10 +12,6 @@
 * Email: `contact@hideo54.com`
 * Twitter: [@hideo54](https://twitter.com/hideo54)
 * GitHub 上での Issue/Pull Request も大歓迎です。
-
-## Coverage
-
-[![codecov](https://codecov.io/gh/hideo54/UT_COVID-19/branch/master/graph/badge.svg?token=H09492SCLL)](https://codecov.io/gh/hideo54/UT_COVID-19)
 
 ## Setup
 

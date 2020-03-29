@@ -30,7 +30,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "develop": "NODE_ENV='development' nodemon -P tsconfig.json index.ts",
-    "test": "jest --verbose"
+    "test": "jest --verbose --coverage"
   },
   "repository": {
     "type": "git",
