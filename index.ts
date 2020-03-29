@@ -1,4 +1,5 @@
 import puppeteer from 'puppeteer';
+import { promises as fs } from 'fs';
 import Twitter from 'twitter';
 import schedule from 'node-schedule';
 import dotenv from 'dotenv';
@@ -22,7 +23,11 @@ const init = async () => {
         consumer_secret: process.env.TWITTER_CONSUMER_SECRET!,
         access_token_key: process.env.TWITTER_ACCESS_TOKEN!,
         access_token_secret: process.env.TWITTER_ACCESS_SECRET!,
-    })
+    });
+    const page = await browser.newPage();
+    const sampleHTML = await fs.readFile(`${__dirname}/visualizer/generated.test.html`, 'utf-8');
+    await page.setContent(sampleHTML);
+    await page.close();
     return { browser, twitterClient };
 };
 
