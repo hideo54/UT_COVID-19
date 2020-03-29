@@ -5,5 +5,9 @@
     "strict": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true
-  }
+  },
+  "exclude": [
+    "__mocks/*.ts",
+    "**/*.test.ts"
+  ]
 }
