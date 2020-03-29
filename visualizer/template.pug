@@ -24,11 +24,11 @@ html(lang='ja')
                         each par in diff.value
                             p!= par
                 if diff.type == 'no-change-tail'
-                    div.omission: p ... (中略)
+                    div.omission: p ... (変更なし; 中略)
                     div.no-change
                         each par in diff.value
                             p!= par
-            div.omission: p ... (中略)
+            div.omission: p ... (変更なし; 中略)
         footer
             hr
             p この画像は#{' '}
