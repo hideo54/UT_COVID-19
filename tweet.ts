@@ -14,17 +14,12 @@ export const tweetMedia = async (client: Twitter, media: Buffer) => {
     } catch (e) {
         const smallerMedia = await sharp(media).resize({
             height: 8192,
-        }).toBuffer();
+        }).png().toBuffer();
         const res = await client.post('media/upload', { media: smallerMedia });
         await client.post('statuses/update', {
             status: tweetBody,
             media_ids: res.media_id_string,
         });
-        const now = new Date();
-        const nowStr = now.toISOString();
-        const srcPath = `${__dirname}/visualized.png`;
-        const destPath = `${__dirname}/visualized-${nowStr}.png`;
-        await fs.copyFile(srcPath, destPath);
     }
 };
 
