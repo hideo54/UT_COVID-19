@@ -4,9 +4,7 @@ import sharp from 'sharp';
 
 const tweetBody = '講義オンライン化に関する情報サイト https://komabataskforce.wixsite.com/forstudents が更新されました。';
 
-export default async (client: Twitter) => {
-    const srcPath = `${__dirname}/visualized.png`;
-    const media = await fs.readFile(srcPath);
+export const tweetMedia = async (client: Twitter, media: Buffer) => {
     try {
         const res = await client.post('media/upload', { media });
         await client.post('statuses/update', {
@@ -24,7 +22,14 @@ export default async (client: Twitter) => {
         });
         const now = new Date();
         const nowStr = now.toISOString();
+        const srcPath = `${__dirname}/visualized.png`;
         const destPath = `${__dirname}/visualized-${nowStr}.png`;
         await fs.copyFile(srcPath, destPath);
     }
+};
+
+export default async (client: Twitter) => {
+    const srcPath = `${__dirname}/visualized.png`;
+    const media = await fs.readFile(srcPath);
+    await tweetMedia(client, media);
 };
