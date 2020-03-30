@@ -1,5 +1,4 @@
 import puppeteer from 'puppeteer';
-import { promises as fs } from 'fs';
 import Twitter from 'twitter';
 import schedule from 'node-schedule';
 import dotenv from 'dotenv';
@@ -7,7 +6,7 @@ dotenv.config();
 
 import { makeDiffs } from './scraper';
 import visualizer from './visualizer';
-import tweet from './tweet';
+import tweet from './lib/tweet';
 
 const init = async () => {
     const browser = await puppeteer.launch({
