@@ -24,11 +24,6 @@ const init = async () => {
         access_token_key: process.env.TWITTER_ACCESS_TOKEN!,
         access_token_secret: process.env.TWITTER_ACCESS_SECRET!,
     });
-    const page = await browser.newPage();
-    const sampleHTML = await fs.readFile(`${__dirname}/visualizer/generated/test.html`, 'utf-8');
-    await page.setContent(sampleHTML);
-    await page.waitFor(1);
-    await page.close();
     return { browser, twitterClient };
 };
 
