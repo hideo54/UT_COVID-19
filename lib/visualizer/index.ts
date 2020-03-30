@@ -47,7 +47,7 @@ export default async (page: puppeteer.Page, lastUpdated: string, currentDate: Da
     await page.setContent(html);
     await page.waitFor(1);
     await page.screenshot({
-        path: 'visualized.png',
+        path: 'lib/visualized.png',
         fullPage: true,
     });
 };

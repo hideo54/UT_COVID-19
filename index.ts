@@ -4,8 +4,8 @@ import schedule from 'node-schedule';
 import dotenv from 'dotenv';
 dotenv.config();
 
-import { makeDiffs } from './scraper';
-import visualizer from './visualizer';
+import { makeDiffs } from './lib/scraper';
+import visualizer from './lib/visualizer';
 import tweet from './lib/tweet';
 
 const init = async () => {
