@@ -1,6 +1,5 @@
 import puppeteer from 'puppeteer';
 import Twitter from 'twitter';
-import { promises as fs } from 'fs';
 import schedule from 'node-schedule';
 import dotenv from 'dotenv';
 dotenv.config();
