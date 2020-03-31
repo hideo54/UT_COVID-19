@@ -1,5 +1,6 @@
 import puppeteer from 'puppeteer';
 import Twitter from 'twitter';
+import { promises as fs } from 'fs';
 import schedule from 'node-schedule';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -7,6 +8,7 @@ dotenv.config();
 import { makeDiffs } from './lib/scraper';
 import visualizer from './lib/visualizer';
 import tweet from './lib/tweet';
+import sendEmail from './lib/sendEmail';
 
 const init = async () => {
     const browser = await puppeteer.launch({
@@ -26,8 +28,8 @@ const init = async () => {
     return { browser, twitterClient };
 };
 
-const job = async (browser: puppeteer.Browser, twitterClient: Twitter) => {
-    const { lastUpdated, paragraphDiffs } = await makeDiffs(`${__dirname}/cache.json`);
+const job = async (browser: puppeteer.Browser, twitterClient: Twitter, doCacheUpdate: boolean) => {
+    const { lastUpdated, paragraphDiffs } = await makeDiffs(`${__dirname}/cache.json`, doCacheUpdate);
     const currentDate = new Date();
     if (paragraphDiffs.filter(x => x.added || x.removed).length > 0) {
         const page = await browser.newPage();
@@ -40,10 +42,13 @@ const job = async (browser: puppeteer.Browser, twitterClient: Twitter) => {
 (async () => {
     const { browser, twitterClient } = await init();
     if (process.env.NODE_ENV === 'development') {
-        await job(browser, twitterClient);
+        await job(browser, twitterClient, false);
     } else {
         schedule.scheduleJob('* * * * *', async () => {
-            await job(browser, twitterClient);
+            await job(browser, twitterClient, true);
+        });
+        schedule.scheduleJob('0 22 * * *', async () => {
+            await sendEmail();
         });
     }
 })();

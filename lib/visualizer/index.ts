@@ -9,11 +9,13 @@ interface Diff {
     value: string[];
 }
 
-export const generateHTML = async (lastUpdated: string, currentDate: Date, paragraphDiffs: ArrayChange<string>[]) => {
+export const generateDiff = (paragraphDiffs: ArrayChange<string>[], convertBreaklineToBr: boolean = true) => {
     const diffs: Diff[] = []
     const displayedNoChangeParagraphs = 4;
     for (const [i, diff] of paragraphDiffs.entries()) {
-        diff.value = diff.value.map(p => p.replace(/\n/g, '<br />'));
+        if (convertBreaklineToBr) {
+            diff.value = diff.value.map(p => p.replace(/\n/g, '<br />'));
+        }
         if (diff.added) {
             diffs.push({ type: 'added', value: diff.value});
         } else if (diff.removed) {
@@ -33,6 +35,11 @@ export const generateHTML = async (lastUpdated: string, currentDate: Date, parag
             }
         }
     }
+    return diffs;
+};
+
+export const generateHTML = async (lastUpdated: string, currentDate: Date, paragraphDiffs: ArrayChange<string>[]) => {
+    const diffs = generateDiff(paragraphDiffs);
     const currentDateStr = moment(currentDate).locale('ja').format('YYYY/M/DD H:mm:ss');
     const style = await fs.readFile(`${__dirname}/style.css`, 'utf-8');
     const html = pug.renderFile(`${__dirname}/template.pug`, {

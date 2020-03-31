@@ -28,7 +28,7 @@ export const fetchCurrentSiteData = async () => {
     return data;
 };
 
-export const makeDiffs = async (cacheJSONPath: string) => {
+export const makeDiffs = async (cacheJSONPath: string, doUpdate: boolean = false) => {
     let cacheData = {} as SiteData;
     try {
         const cacheFile = await fs.readFile(cacheJSONPath, 'utf-8');
@@ -41,7 +41,7 @@ export const makeDiffs = async (cacheJSONPath: string) => {
     const lastUpdated = cacheData.lastUpdated;
     const paragraphDiffs = diffArrays(cacheData.paragraphs, currentData.paragraphs);
 
-    if (process.env.NODE_ENV !== 'development') {
+    if (doUpdate) {
         await fs.writeFile(cacheJSONPath, JSON.stringify(currentData));
     }
 

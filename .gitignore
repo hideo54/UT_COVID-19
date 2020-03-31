@@ -1,9 +1,12 @@
 node_modules/
 .env
+key.json
 cache.json
 visualized.png
 /coverage
 /lib/visualizer/generated/*.html
 !/lib/visualizer/generated/test.html
+/cache/*.json
+!cache/test.json
 *.js
 !jest.config.js
