@@ -5,7 +5,7 @@ import { stripIndent } from 'common-tags';
 import dotenv from 'dotenv';
 dotenv.config();
 
-import { makeDiffs, fetchCurrentSiteData } from './scraper';
+import { makeDiffs } from './scraper';
 import { generateDiff } from './visualizer';
 
 const key: { client_id: string; private_key: string; } = require('../key.json');
