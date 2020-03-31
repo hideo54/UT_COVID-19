@@ -1,15 +1,20 @@
 import moment from 'moment';
+import { promises as fs } from 'fs';
 import nodemailer from 'nodemailer';
 import { stripIndent } from 'common-tags';
 import dotenv from 'dotenv';
 dotenv.config();
 
-import { makeDiffs } from './scraper';
+import { makeDiffs, fetchCurrentSiteData } from './scraper';
 import { generateDiff } from './visualizer';
 
 const key: { client_id: string; private_key: string; } = require('../key.json');
 
 const sendEmail = async () => {
+    const todayStr = moment().toISOString().slice(0, 10);
+    const currentDataString = await fs.readFile(`${__dirname}/../cache.json`);
+    await fs.writeFile(`${__dirname}/../cache/${todayStr}.json`, currentDataString);
+
     const yesterday = moment().subtract(1, 'day');
     const yesterdayStr = yesterday.toISOString().slice(0, 10);
     const { paragraphDiffs } = await makeDiffs(`${__dirname}/../cache/${yesterdayStr}.json`, false);
