@@ -44,7 +44,7 @@ const sendEmail = async () => {
         配信を停止したい場合にもお問い合わせください。
 
         以下、更新内容になります。
-        ---` + dataText.join('\n') + '\n// 後略';
+        ---` + `\n${dataText.join('\n')}\n// 後略`;
     const fromAddress = process.env.EMAIL_ADDRESS_FROM!;
     const toAddress = process.env.EMAIL_ADDRESS_TO!;
     const transporter = nodemailer.createTransport({
