@@ -1,6 +1,6 @@
 import scrapeIt from 'scrape-it';
 import { promises as fs } from 'fs';
-import { diffArrays } from 'diff';
+import { diffArrays, ArrayChange } from 'diff';
 
 const url = 'https://komabataskforce.wixsite.com/forstudents';
 
@@ -28,22 +28,27 @@ export const fetchCurrentSiteData = async () => {
     return data;
 };
 
-export const makeDiffs = async (cacheJSONPath: string, doUpdate: boolean = false) => {
+export const makeDiffs = async (cacheJSONPath: string, doUpdate: boolean = false): Promise<{
+    lastUpdated: string;
+    paragraphDiffs: ArrayChange<string>[];
+}> => {
     let cacheData = {} as SiteData;
     try {
         const cacheFile = await fs.readFile(cacheJSONPath, 'utf-8');
         cacheData = JSON.parse(cacheFile);
+
+        const currentData = await fetchCurrentSiteData();
+        const lastUpdated = cacheData.lastUpdated;
+        const paragraphDiffs = diffArrays(cacheData.paragraphs, currentData.paragraphs);
+
+        if (doUpdate) {
+            await fs.writeFile(cacheJSONPath, JSON.stringify(currentData));
+        }
+
+        return { lastUpdated, paragraphDiffs };
     } catch {
-        cacheData = { lastUpdated: '', paragraphs: [] };
+        console.error('Failed to read cache file. Make cache file before running this program.');
+
+        return { lastUpdated: '', paragraphDiffs: []};
     }
-
-    const currentData = await fetchCurrentSiteData();
-    const lastUpdated = cacheData.lastUpdated;
-    const paragraphDiffs = diffArrays(cacheData.paragraphs, currentData.paragraphs);
-
-    if (doUpdate) {
-        await fs.writeFile(cacheJSONPath, JSON.stringify(currentData));
-    }
-
-    return { lastUpdated, paragraphDiffs };
 };
