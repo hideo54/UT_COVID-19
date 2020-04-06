@@ -47,7 +47,7 @@ export const makeDiffs = async (cacheJSONPath: string, doUpdate: boolean = false
     const lastUpdated = cacheData.lastUpdated;
     const paragraphDiffs = diffArrays(cacheData.paragraphs, currentData.paragraphs);
 
-    if (doUpdate) {
+    if (doUpdate && paragraphDiffs.length > 0) {
         await fs.writeFile(cacheJSONPath, JSON.stringify(currentData));
     }
 
