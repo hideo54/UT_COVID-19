@@ -36,19 +36,19 @@ export const makeDiffs = async (cacheJSONPath: string, doUpdate: boolean = false
     try {
         const cacheFile = await fs.readFile(cacheJSONPath, 'utf-8');
         cacheData = JSON.parse(cacheFile);
-
-        const currentData = await fetchCurrentSiteData();
-        const lastUpdated = cacheData.lastUpdated;
-        const paragraphDiffs = diffArrays(cacheData.paragraphs, currentData.paragraphs);
-
-        if (doUpdate) {
-            await fs.writeFile(cacheJSONPath, JSON.stringify(currentData));
-        }
-
-        return { lastUpdated, paragraphDiffs };
     } catch {
         console.error('Failed to read cache file. Make cache file before running this program.');
 
         return { lastUpdated: '', paragraphDiffs: []};
     }
+
+    const currentData = await fetchCurrentSiteData();
+    const lastUpdated = cacheData.lastUpdated;
+    const paragraphDiffs = diffArrays(cacheData.paragraphs, currentData.paragraphs);
+
+    if (doUpdate) {
+        await fs.writeFile(cacheJSONPath, JSON.stringify(currentData));
+    }
+
+    return { lastUpdated, paragraphDiffs };
 };
