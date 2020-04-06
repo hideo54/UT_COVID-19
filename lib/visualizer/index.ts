@@ -14,7 +14,10 @@ export const generateDiff = (paragraphDiffs: ArrayChange<string>[], convertBreak
     const displayedNoChangeParagraphs = 4;
     for (const [i, diff] of paragraphDiffs.entries()) {
         if (convertBreaklineToBr) {
-            diff.value = diff.value.map(p => p.replace(/\n/g, '<br />'));
+            diff.value = diff.value.map(p =>
+                p.replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/\n/g, '<br />'));
         }
         if (diff.added) {
             diffs.push({ type: 'added', value: diff.value});

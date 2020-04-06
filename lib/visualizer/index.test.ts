@@ -55,6 +55,7 @@ describe('Visualizer', () => {
                     removed: undefined,
                     value: [
                         '追加された文章5',
+                        '<三角カッコで囲まれた文章>',
                     ],
                 },
                 {
