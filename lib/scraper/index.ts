@@ -24,6 +24,7 @@ export const fetchCurrentSiteData = async () => {
     const data = result.data;
     data.paragraphs = (data.paragraphs.filter(s => typeof s === 'string'
         && s !== '​' // This is U+200B (zero width space), not an empty string.
+        && s !== '' // empty string
     ));
     return data;
 };
