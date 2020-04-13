@@ -6,6 +6,7 @@ const url = 'https://komabataskforce.wixsite.com/forstudents';
 
 interface SiteData {
     lastUpdated: string;
+    stageName: string;
     paragraphs: string[];
 }
 
@@ -19,6 +20,10 @@ export const fetchCurrentSiteData = async () => {
         },
         paragraphs: {
             listItem: 'div#comp-k844k5vo p',
+        },
+        stageName: {
+            selector: '#comp-k89t0scx h6',
+            eq: 0, // 0 to Japanese, 1 to English
         },
     });
     const data = result.data;
