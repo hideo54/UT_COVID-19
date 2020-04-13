@@ -26,6 +26,7 @@ export const fetchCurrentSiteData = async () => {
             eq: 0, // 0 to Japanese, 1 to English
         },
     });
+    if (result.response.statusCode !== 200) return null;
     const data = result.data;
     data.paragraphs = (data.paragraphs.filter(s => typeof s === 'string'
         && s !== '​' // This is U+200B (zero width space), not an empty string.
@@ -37,7 +38,7 @@ export const fetchCurrentSiteData = async () => {
 export const makeDiffs = async (cacheJSONPath: string, doUpdate: boolean = false): Promise<{
     lastUpdated: string;
     paragraphDiffs: ArrayChange<string>[];
-}> => {
+} | null> => {
     let cacheData = {} as SiteData;
     try {
         const cacheFile = await fs.readFile(cacheJSONPath, 'utf-8');
@@ -49,6 +50,8 @@ export const makeDiffs = async (cacheJSONPath: string, doUpdate: boolean = false
     }
 
     const currentData = await fetchCurrentSiteData();
+    if (currentData === null) return null;
+    if (currentData.paragraphs === []) return null;
     const lastUpdated = cacheData.lastUpdated;
     const paragraphDiffs = diffArrays(cacheData.paragraphs, currentData.paragraphs);
 

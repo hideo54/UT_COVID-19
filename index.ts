@@ -28,13 +28,16 @@ const init = async () => {
 };
 
 const job = async (browser: puppeteer.Browser, twitterClient: Twitter, doCacheUpdate: boolean) => {
-    const { lastUpdated, paragraphDiffs } = await makeDiffs(`${__dirname}/cache.json`, doCacheUpdate);
-    const currentDate = new Date();
-    if (paragraphDiffs.filter(x => x.added || x.removed).length > 0) {
-        const page = await browser.newPage();
-        await visualizer(page, lastUpdated, currentDate, paragraphDiffs);
-        await tweet(twitterClient);
-        await page.close();
+    const diffs = await makeDiffs(`${__dirname}/cache.json`, doCacheUpdate);
+    if (diffs) {
+        const { lastUpdated, paragraphDiffs } = diffs;
+        const currentDate = new Date();
+        if (paragraphDiffs.filter(x => x.added || x.removed).length > 0) {
+            const page = await browser.newPage();
+            await visualizer(page, lastUpdated, currentDate, paragraphDiffs);
+            await tweet(twitterClient);
+            await page.close();
+        }
     }
 };
 
