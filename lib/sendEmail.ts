@@ -17,7 +17,9 @@ const sendEmail = async () => {
 
     const yesterday = moment().subtract(1, 'day');
     const yesterdayStr = yesterday.toISOString().slice(0, 10);
-    const { paragraphDiffs } = await makeDiffs(`${__dirname}/../cache/${yesterdayStr}.json`, false);
+    const ds = await makeDiffs(`${__dirname}/../cache/${yesterdayStr}.json`, false);
+    if (ds === null) return;
+    const { paragraphDiffs } = ds;
     const diffs = generateDiff(paragraphDiffs, false);
     if (diffs.length > 0) {
         const dataText = diffs.map(diff => {
