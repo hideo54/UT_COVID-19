@@ -1,4 +1,5 @@
 import fs from 'fs';
+import http from 'http';
 
 jest.mock('tinyreq', () => {
     const sourceHTML = fs.readFileSync(`${__dirname}/source.test.html`, {
@@ -8,7 +9,7 @@ jest.mock('tinyreq', () => {
         // options is a url.
         const err = null;
         const body = sourceHTML;
-        const res = null;
+        const res = { statusCode: 200 };
         callback(err, body, res);
     };
 });
@@ -31,6 +32,7 @@ describe('Scraper', () => {
                     'このサイトはbrの後にHTMLテキストの方も改行を入れており、\n' +
                     'そこは拾われます',
             ],
+            stageName: 'ステージ・レッド',
         };
         expect(data).toStrictEqual(expected);
     });
