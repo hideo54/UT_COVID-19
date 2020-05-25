@@ -23,8 +23,12 @@ export const tweetMedia = async (client: Twitter, media: Buffer) => {
     }
 };
 
-export default async (client: Twitter) => {
-    const srcPath = `${__dirname}/visualized.png`;
-    const media = await fs.readFile(srcPath);
-    await tweetMedia(client, media);
+export default async (client: Twitter, tweet?: string) => {
+    if (tweet) {
+        await client.post('statuses/update', { status: tweet });
+    } else {
+        const srcPath = `${__dirname}/visualized.png`;
+        const media = await fs.readFile(srcPath);
+        await tweetMedia(client, media);
+    }
 };

@@ -10,6 +10,10 @@ interface SiteData {
     paragraphs: string[];
 }
 
+interface Cache extends SiteData {
+    stageColor: string;
+}
+
 export const fetchCurrentSiteData = async () => {
     const result = await scrapeIt<SiteData>(url, {
         lastUpdated: {
@@ -35,29 +39,59 @@ export const fetchCurrentSiteData = async () => {
     return data;
 };
 
+interface StageDiff {
+    name?: {
+        before: string;
+        after: string;
+    };
+    color?: {
+        before: string;
+        after: string;
+    };
+}
+
 export const makeDiffs = async (cacheJSONPath: string, doUpdate: boolean = false): Promise<{
     lastUpdated: string;
     paragraphDiffs: ArrayChange<string>[];
+    stageDiff: StageDiff;
 } | null> => {
-    let cacheData = {} as SiteData;
+    let cacheData = {} as Cache;
     try {
         const cacheFile = await fs.readFile(cacheJSONPath, 'utf-8');
         cacheData = JSON.parse(cacheFile);
     } catch {
         console.error('Failed to read cache file. Make cache file before running this program.');
 
-        return { lastUpdated: '', paragraphDiffs: []};
+        return {
+            lastUpdated: '',
+            stageDiff: {},
+            paragraphDiffs: [],
+        };
     }
 
     const currentData = await fetchCurrentSiteData();
     if (currentData === null) return null;
     if (currentData.paragraphs === []) return null;
     const lastUpdated = cacheData.lastUpdated;
+    const lastStageName = cacheData.stageName;
+
+    const stageDiff = {
+        name: {
+            before: lastStageName,
+            after: currentData.stageName,
+        },
+        // TODO: color
+    };
+
     const paragraphDiffs = diffArrays(cacheData.paragraphs, currentData.paragraphs);
+
+    if (doUpdate && lastStageName !== currentData.stageName) {
+        await fs.writeFile(cacheJSONPath, JSON.stringify(currentData));
+    }
 
     if (doUpdate && currentData.paragraphs !== []) {
         await fs.writeFile(cacheJSONPath, JSON.stringify(currentData));
     }
 
-    return { lastUpdated, paragraphDiffs };
+    return { lastUpdated, paragraphDiffs, stageDiff };
 };

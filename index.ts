@@ -30,7 +30,7 @@ const init = async () => {
 const job = async (browser: puppeteer.Browser, twitterClient: Twitter, doCacheUpdate: boolean) => {
     const diffs = await makeDiffs(`${__dirname}/cache.json`, doCacheUpdate);
     if (diffs) {
-        const { lastUpdated, paragraphDiffs } = diffs;
+        const { lastUpdated, paragraphDiffs, stageDiff } = diffs;
         const currentDate = new Date();
         if (paragraphDiffs.filter(x => x.added || x.removed).length > 0) {
             const page = await browser.newPage();
@@ -38,6 +38,17 @@ const job = async (browser: puppeteer.Browser, twitterClient: Twitter, doCacheUp
             await tweet(twitterClient);
             await page.close();
         }
+        if (stageDiff.name) {
+            const { before, after } = stageDiff.name;
+            if (before !== after && after.includes('ステージ')) {
+                const url = 'https://komabataskforce.wixsite.com/forstudents';
+                const text = `ステージが「${before}」から「${after}」に変更されました。 ${url}`;
+                await tweet(twitterClient, text);
+            }
+        }
+        // if (stageDiff.color) {
+            // TODO
+        // }
     }
 };
 
