@@ -10,5 +10,3 @@ export const updateIcon = async (client: Twitter, color: sharp.Color) => {
         image: icon.toString('base64'),
     });
 };
-
-export default updateIcon;

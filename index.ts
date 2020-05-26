@@ -7,6 +7,7 @@ dotenv.config();
 import { makeDiffs } from './lib/scraper';
 import visualizer from './lib/visualizer';
 import tweet from './lib/tweet';
+import { updateIcon } from './lib/updateIcon';
 import sendEmail from './lib/sendEmail';
 
 const init = async () => {
@@ -33,6 +34,7 @@ const job = async (browser: puppeteer.Browser, twitterClient: Twitter, doCacheUp
         const { lastUpdated, paragraphDiffs, stageDiff } = diffs;
         const currentDate = new Date();
         if (paragraphDiffs.filter(x => x.added || x.removed).length > 0) {
+            console.log('Tweeting paragraph diffs...');
             const page = await browser.newPage();
             await visualizer(page, lastUpdated, currentDate, paragraphDiffs);
             await tweet(twitterClient);
@@ -41,14 +43,16 @@ const job = async (browser: puppeteer.Browser, twitterClient: Twitter, doCacheUp
         if (stageDiff.name) {
             const { before, after } = stageDiff.name;
             if (before !== after && after.includes('ステージ')) {
+                console.log('Tweeting stage-name change...');
                 const url = 'https://komabataskforce.wixsite.com/forstudents';
                 const text = `ステージが「${before}」から「${after}」に変更されました。 ${url}`;
                 await tweet(twitterClient, text);
             }
         }
-        // if (stageDiff.color) {
-            // TODO
-        // }
+        if (stageDiff.color) {
+            console.log('Updating icon color...');
+            await updateIcon(twitterClient, stageDiff.color.after);
+        }
     }
 };
 

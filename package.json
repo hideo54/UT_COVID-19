@@ -12,6 +12,7 @@
     "@types/puppeteer": "^2.0.1",
     "@types/sharp": "^0.24.0",
     "@types/twitter": "^1.7.0",
+    "axios": "^0.19.2",
     "common-tags": "^1.8.0",
     "diff": "^4.0.2",
     "dotenv": "^8.2.0",
@@ -21,6 +22,7 @@
     "pug": "^2.0.4",
     "puppeteer": "^2.1.1",
     "scrape-it": "^5.2.3",
+    "shady-css-parser": "^0.1.0",
     "sharp": "^0.25.2",
     "twitter": "^1.7.1",
     "typescript": "^3.8.3"

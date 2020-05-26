@@ -1,19 +1,3 @@
-import fs from 'fs';
-import http from 'http';
-
-jest.mock('tinyreq', () => {
-    const sourceHTML = fs.readFileSync(`${__dirname}/source.test.html`, {
-        encoding: 'utf-8',
-    });
-    return (options: string, callback: Function) => {
-        // options is a url.
-        const err = null;
-        const body = sourceHTML;
-        const res = { statusCode: 200 };
-        callback(err, body, res);
-    };
-});
-
 import { fetchCurrentSiteData } from './index';
 
 describe('Scraper', () => {
@@ -33,6 +17,7 @@ describe('Scraper', () => {
                     'そこは拾われます',
             ],
             stageName: 'ステージ・レッド',
+            stageColor: 'rgba(179, 4, 4, 1)',
         };
         expect(data).toStrictEqual(expected);
     });

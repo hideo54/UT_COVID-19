@@ -1,4 +1,7 @@
-import scrapeIt from 'scrape-it';
+import axios from 'axios';
+import { scrapeHTML } from 'scrape-it';
+import cheerio from 'cheerio';
+import { Parser, Ruleset, Declaration, Expression } from 'shady-css-parser';
 import { promises as fs } from 'fs';
 import { diffArrays, ArrayChange } from 'diff';
 
@@ -7,15 +10,15 @@ const url = 'https://komabataskforce.wixsite.com/forstudents';
 interface SiteData {
     lastUpdated: string;
     stageName: string;
+    stageColor: string;
     paragraphs: string[];
 }
 
-interface Cache extends SiteData {
-    stageColor: string;
-}
-
 export const fetchCurrentSiteData = async () => {
-    const result = await scrapeIt<SiteData>(url, {
+    const res = await axios.get(url);
+    if (res.status !== 200) return null;
+    const html = res.data;
+    const data = scrapeHTML<SiteData>(html, {
         lastUpdated: {
             selector: 'div#comp-k8515tfz p',
             convert: s => s.replace(/^last updated at ([a-zA-Z0-9,: ]*)$/,
@@ -30,12 +33,26 @@ export const fetchCurrentSiteData = async () => {
             eq: 0, // 0 to Japanese, 1 to English
         },
     });
-    if (result.response.statusCode !== 200) return null;
-    const data = result.data;
     data.paragraphs = (data.paragraphs.filter(s => typeof s === 'string'
         && s !== '​' // This is U+200B (zero width space), not an empty string.
         && s !== '' // empty string
     ));
+    const $ = cheerio.load(html);
+    const styleId = 'style-k8p8giuj';
+    const style = $(`style[data-styleid=${styleId}]`).html();
+    if (style) {
+        const parser = new Parser();
+        const { rules } = parser.parse(style);
+        const rulesets = rules.filter(rule => rule.type === 'ruleset') as Ruleset[];
+        const rulelist = rulesets.filter(rset => rset.selector === `.${styleId}bg`)[0].rulelist;
+        const declarations = rulelist.rules.filter(rule => rule.type === 'declaration') as Declaration[];
+        const bgColorDeclaration = declarations.filter(declaration => declaration.name === 'background-color')[0];
+        const bgColorExpression = bgColorDeclaration.value as Expression;
+        const bgColor = bgColorExpression.text;
+        data.stageColor = bgColor;
+    } else {
+        data.stageColor = '';
+    }
     return data;
 };
 
@@ -55,7 +72,7 @@ export const makeDiffs = async (cacheJSONPath: string, doUpdate: boolean = false
     paragraphDiffs: ArrayChange<string>[];
     stageDiff: StageDiff;
 } | null> => {
-    let cacheData = {} as Cache;
+    let cacheData = {} as SiteData;
     try {
         const cacheFile = await fs.readFile(cacheJSONPath, 'utf-8');
         cacheData = JSON.parse(cacheFile);
@@ -74,23 +91,25 @@ export const makeDiffs = async (cacheJSONPath: string, doUpdate: boolean = false
     if (currentData.paragraphs === []) return null;
     const lastUpdated = cacheData.lastUpdated;
     const lastStageName = cacheData.stageName;
+    const lastStageColor = cacheData.stageColor;
 
     const stageDiff = {
-        name: {
+        name: currentData.stageName === lastStageName ? undefined : {
             before: lastStageName,
             after: currentData.stageName,
         },
-        // TODO: color
+        color: currentData.stageColor === lastStageColor ? undefined : {
+            before: lastStageColor,
+            after: currentData.stageColor,
+        },
     };
 
     const paragraphDiffs = diffArrays(cacheData.paragraphs, currentData.paragraphs);
 
-    if (doUpdate && lastStageName !== currentData.stageName) {
-        await fs.writeFile(cacheJSONPath, JSON.stringify(currentData));
-    }
-
-    if (doUpdate && currentData.paragraphs !== []) {
-        await fs.writeFile(cacheJSONPath, JSON.stringify(currentData));
+    if (doUpdate) {
+        if (stageDiff || currentData.paragraphs !== []) {
+            await fs.writeFile(cacheJSONPath, JSON.stringify(currentData));
+        }
     }
 
     return { lastUpdated, paragraphDiffs, stageDiff };
