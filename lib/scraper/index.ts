@@ -38,7 +38,7 @@ export const fetchCurrentSiteData = async () => {
         && s !== '' // empty string
     ));
     const $ = cheerio.load(html);
-    const styleId = 'style-k8p8giuj';
+    const styleId = 'style-kbfuay7t';
     const style = $(`style[data-styleid=${styleId}]`).html();
     if (style) {
         const parser = new Parser();
