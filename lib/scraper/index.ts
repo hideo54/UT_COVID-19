@@ -15,45 +15,50 @@ interface SiteData {
 }
 
 export const fetchCurrentSiteData = async () => {
-    const res = await axios.get(url);
-    if (res.status !== 200) return null;
-    const html = res.data;
-    const data = scrapeHTML<SiteData>(html, {
-        lastUpdated: {
-            selector: 'div#comp-k8515tfz p',
-            convert: s => s.replace(/^last updated at ([a-zA-Z0-9,: ]*)$/,
-                (m: string, date: string) => date
-            ),
-        },
-        paragraphs: {
-            listItem: 'div#comp-k844k5vo p',
-        },
-        stageName: {
-            selector: '#comp-k89t0scx h6',
-            eq: 0, // 0 to Japanese, 1 to English
-        },
-    });
-    data.paragraphs = (data.paragraphs.filter(s => typeof s === 'string'
-        && s !== '​' // This is U+200B (zero width space), not an empty string.
-        && s !== '' // empty string
-    ));
-    const $ = cheerio.load(html);
-    const styleId = 'style-kbfuay7t';
-    const style = $(`style[data-styleid=${styleId}]`).html();
-    if (style) {
-        const parser = new Parser();
-        const { rules } = parser.parse(style);
-        const rulesets = rules.filter(rule => rule.type === 'ruleset') as Ruleset[];
-        const rulelist = rulesets.filter(rset => rset.selector === `.${styleId}bg`)[0].rulelist;
-        const declarations = rulelist.rules.filter(rule => rule.type === 'declaration') as Declaration[];
-        const bgColorDeclaration = declarations.filter(declaration => declaration.name === 'background-color')[0];
-        const bgColorExpression = bgColorDeclaration.value as Expression;
-        const bgColor = bgColorExpression.text;
-        data.stageColor = bgColor;
-    } else {
-        data.stageColor = '';
+    try {
+        const res = await axios.get(url);
+        if (res.status !== 200) return null;
+        const html = res.data;
+        const data = scrapeHTML<SiteData>(html, {
+            lastUpdated: {
+                selector: 'div#comp-k8515tfz p',
+                convert: s => s.replace(/^last updated at ([a-zA-Z0-9,: ]*)$/,
+                    (m: string, date: string) => date
+                ),
+            },
+            paragraphs: {
+                listItem: 'div#comp-k844k5vo p',
+            },
+            stageName: {
+                selector: '#comp-k89t0scx h6',
+                eq: 0, // 0 to Japanese, 1 to English
+            },
+        });
+        data.paragraphs = (data.paragraphs.filter(s => typeof s === 'string'
+            && s !== '​' // This is U+200B (zero width space), not an empty string.
+            && s !== '' // empty string
+        ));
+        const $ = cheerio.load(html);
+        const styleId = 'style-kbfuay7t';
+        const style = $(`style[data-styleid=${styleId}]`).html();
+        if (style) {
+            const parser = new Parser();
+            const { rules } = parser.parse(style);
+            const rulesets = rules.filter(rule => rule.type === 'ruleset') as Ruleset[];
+            const rulelist = rulesets.filter(rset => rset.selector === `.${styleId}bg`)[0].rulelist;
+            const declarations = rulelist.rules.filter(rule => rule.type === 'declaration') as Declaration[];
+            const bgColorDeclaration = declarations.filter(declaration => declaration.name === 'background-color')[0];
+            const bgColorExpression = bgColorDeclaration.value as Expression;
+            const bgColor = bgColorExpression.text;
+            data.stageColor = bgColor;
+        } else {
+            data.stageColor = '';
+        }
+        return data;
+    } catch (e) {
+        console.log(`Error: ${e}`);
+        return null;
     }
-    return data;
 };
 
 interface StageDiff {
