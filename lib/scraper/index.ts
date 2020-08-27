@@ -34,6 +34,13 @@ export const fetchCurrentSiteData = async () => {
                 eq: 0, // 0 to Japanese, 1 to English
             },
         });
+        if (data.stageName === '' && data.lastUpdated === '') {
+            console.log('stageName and lastUpdated become empty; something might be wrong. Paragraphs:');
+            console.log(data.paragraphs);
+            if (data.paragraphs === []) {
+                return null;
+            }
+        }
         data.paragraphs = (data.paragraphs.filter(s => typeof s === 'string'
             && s !== '​' // This is U+200B (zero width space), not an empty string.
             && s !== '' // empty string
