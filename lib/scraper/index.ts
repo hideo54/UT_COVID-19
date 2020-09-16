@@ -37,9 +37,7 @@ export const fetchCurrentSiteData = async () => {
         if (data.stageName === '' && data.lastUpdated === '') {
             console.log('stageName and lastUpdated become empty; something might be wrong. Paragraphs:');
             console.log(data.paragraphs);
-            if (data.paragraphs === []) {
-                return null;
-            }
+            return null;
         }
         data.paragraphs = (data.paragraphs.filter(s => typeof s === 'string'
             && s !== '​' // This is U+200B (zero width space), not an empty string.
