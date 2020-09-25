@@ -17,7 +17,6 @@ const init = async () => {
             height: 800,
             deviceScaleFactor: 2,
         },
-        headless: process.env.NODE_ENV !== 'development',
     });
     const twitterClient = new Twitter({
         consumer_key: process.env.TWITTER_CONSUMER_KEY!,
