@@ -61,7 +61,7 @@ const job = async (browser: puppeteer.Browser, twitterClient: Twitter, doCacheUp
     if (process.env.NODE_ENV === 'development') {
         await job(browser, twitterClient, false);
     } else {
-        schedule.scheduleJob('*/2 * * * *', async () => {
+        schedule.scheduleJob('*/10 * * * *', async () => {
             await job(browser, twitterClient, true);
         });
         schedule.scheduleJob('0 22 * * *', async () => {
