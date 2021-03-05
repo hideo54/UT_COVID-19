@@ -19,7 +19,7 @@
     "moment": "^2.24.0",
     "node-schedule": "^1.3.2",
     "nodemailer": "^6.4.6",
-    "pug": "^2.0.4",
+    "pug": "^3.0.1",
     "puppeteer": "^2.1.1",
     "scrape-it": "^5.2.3",
     "shady-css-parser": "^0.1.0",
